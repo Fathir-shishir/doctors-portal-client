@@ -1,37 +1,47 @@
+import React from 'react';
 import { format } from 'date-fns';
-import React, { useState, useEffect } from 'react';
-import BookingModal from './BookingModal';
-import Service from './Service';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import auth from '../../firebase.init';
 
-const AvailableAppointments = ({ date }) => {
-    const [services, setServices] = useState([]);
-    const [treatment, setTreatment] = useState(null);
+const BookingModal = ({ date, treatment, setTreatment }) => {
+    const { _id, name, slots } = treatment;
+    const [user, loading, error] = useAuthState(auth);
 
-    useEffect(() => {
-        fetch('http://localhost:5000/service')
-            .then(res => res.json())
-            .then(data => setServices(data));
-    }, [])
+    const handleBooking = event =>{
+        event.preventDefault();
+        const slot = event.target.slot.value;
+        console.log(_id, name, slot);
+        
+        // to close the modal
+        setTreatment(null);
+    }
 
     return (
-        <div className='my-10'>
-            <h4 className='text-xl text-secondary text-center my-12'>Available Appointments on {format(date, 'PP')}</h4>
-            <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5'>
-                {
-                    services.map(service => <Service
-                        key={service._id}
-                        service={service}
-                        setTreatment={setTreatment}
-                    ></Service>)
-                }
+        <div>
+            <input type="checkbox" id="booking-modal" className="modal-toggle" />
+            <div className="modal modal-bottom sm:modal-middle">
+                <div className="modal-box">
+                    <label htmlFor="booking-modal" className="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
+                    <h3 className="font-bold text-lg text-secondary">Booking for: {name}</h3>
+                    <form onSubmit={handleBooking} className='grid grid-cols-1 gap-3 justify-items-center mt-2'>
+                        <input type="text" disabled value={format(date, 'PP')} className="input input-bordered w-full max-w-xs" />
+                        <select name="slot" className="select select-bordered w-full max-w-xs">
+                            {
+                                slots.map((slot, index) =><option 
+                                    key={index}
+                                    value={slot}
+                                >{slot}</option>)
+                            }
+                        </select>
+                        <input type="text" name="name" disabled value={user?.displayName || ''} className="input input-bordered w-full max-w-xs" />
+                        <input type="email" name="email" disabled value={user?.email || ''} className="input input-bordered w-full max-w-xs" />
+                        <input type="text" name="phone" placeholder="Phone Number" className="input input-bordered w-full max-w-xs" />
+                        <input type="submit" value="Submit" className="btn btn-secondary w-full max-w-xs" />
+                    </form>
+                </div>
             </div>
-            {treatment && <BookingModal
-                date={date}
-                treatment={treatment}
-                setTreatment={setTreatment}
-            ></BookingModal>}
         </div>
     );
 };
 
-export default AvailableAppointments;
+export default BookingModal;
