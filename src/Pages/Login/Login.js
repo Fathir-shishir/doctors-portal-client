@@ -16,10 +16,11 @@ const Login = () => {
         error,
     ] = useSignInWithEmailAndPassword(auth);
 
+    const [token] = useToken(user || gUser);
+
     let signInError;
     const navigate = useNavigate();
     const location = useLocation();
-    const [token] = useToken(user || gUser)
     let from = location.state?.from?.pathname || "/";
 
     useEffect( () =>{
