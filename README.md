@@ -1,6 +1,6 @@
 # Intro
-This project consist of two separate applications -
-• Frontend
+This project consist of two separate applications - <br />
+• Frontend <br />
 • Backend
 
 
