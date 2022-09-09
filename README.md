@@ -1,6 +1,8 @@
 # Intro
+This project consist of two separate applications -
+• Frontend
+• Backend
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
 
