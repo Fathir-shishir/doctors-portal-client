@@ -6,7 +6,7 @@ This project consist of two separate applications - <br />
 Frontend application is hosted in Firebase and Backend in Hiroku.
 
 # Stack
-<b> Frontend <b/>
+** Frontend **
 
 In the project directory, you can run:
 
